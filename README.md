@@ -1,5 +1,26 @@
-# Vue 3 + Vite
+# 🚀 Prática de Vue 3 + TypeScript
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+Um projeto simples para praticar os fundamentos do **Vue 3**,
 
-Learn more about IDE Support for Vue in the [Vue Docs Scaling up Guide](https://vuejs.org/guide/scaling-up/tooling.html#ide-support).
+## 🛠️ Tecnologias
+- **Framework:** Vue 3 (Composition API)
+- **Linguagem:** TypeScript
+- **Estado:** Pinia
+- **Rotas:** Vue Router
+- **Ícones:** Lucide Vue Next
+
+## 🏃 Como rodar o projeto
+
+1. **Instale as dependências:**
+   ```bash
+   npm install
+   ```
+
+2. **Inicie o servidor de desenvolvimento:**
+   ```bash
+   npm run dev
+   ```
+
+3. **Abra no navegador:**
+   `http://localhost:5173/`
+
