@@ -1,4 +1,6 @@
 <script setup>
+import { Plus } from "lucide-vue-next";
+
 defineProps({
 	title: {
 		type: String,
@@ -20,7 +22,7 @@ defineEmits(["add"]);
 
 		<div class="header-actions">
 			<button class="btn btn-primary" @click="$emit('add')">
-				<span>+</span> Adicionar
+				<Plus :size="20" /> Adicionar
 			</button>
 		</div>
 	</header>
