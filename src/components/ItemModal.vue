@@ -169,22 +169,6 @@ const handleSave = () => {
 	color: var(--text-muted);
 }
 
-.form-input {
-	width: 100%;
-	padding: 0.75rem 1rem;
-	background: rgba(15, 23, 42, 0.5);
-	border: 1px solid var(--glass-border);
-	border-radius: 8px;
-	color: white;
-	outline: none;
-	transition: border-color 0.3s;
-	box-sizing: border-box;
-}
-
-.form-input:focus {
-	border-color: var(--primary);
-}
-
 .modal-footer {
 	display: flex;
 	justify-content: flex-end;

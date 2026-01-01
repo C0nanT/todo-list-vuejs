@@ -1,37 +1,39 @@
 <script setup>
-import { Plus } from "lucide-vue-next";
+import { useSettingsStore } from "../stores/settings";
+
+const settings = useSettingsStore();
 
 defineProps({
 	title: {
 		type: String,
-		default: "Vue Mastery",
-	},
-	subtitle: {
-		type: String,
-		default: "Explorando o poder da reatividade e templates",
+		default: "Vue List",
 	},
 });
-
-defineEmits(["add"]);
 </script>
 
 <template>
-	<header>
-		<h1>{{ title }}</h1>
-		<p class="subtitle">{{ subtitle }}</p>
-
-		<div class="header-actions">
-			<button class="btn btn-primary" @click="$emit('add')">
-				<Plus :size="20" /> Adicionar
-			</button>
+	<header class="app-header">
+		<div class="header-content">
+			<h1>{{ title }}</h1>
+			<p class="welcome-msg">Olá, <span>{{ settings.userName }}</span>! 👋</p>
 		</div>
 	</header>
+	<hr class="header-separator">
 </template>
 
 <style scoped>
-.header-actions {
-	display: flex;
-	justify-content: flex-end;
-	margin-bottom: 2rem;
+.app-header {
+	margin-bottom: 1rem;
+}
+
+.welcome-msg {
+	color: var(--text-muted);
+	font-size: 1.1rem;
+	margin: 0;
+}
+
+.welcome-msg span {
+	color: var(--primary);
+	font-weight: 600;
 }
 </style>
