@@ -2,6 +2,7 @@
 import { ref, onMounted, watch } from "vue";
 import { useToast } from "vue-toastification";
 import { useSettingsStore } from "../stores/settings";
+import { Search } from "lucide-vue-next";
 import ItemCard from "../components/ItemCard.vue";
 import ItemModal from "../components/ItemModal.vue";
 import { apiService } from "../services/api";
@@ -24,12 +25,17 @@ const isModalConfirmOpen = ref(false);
 const currentPage = ref(1);
 const totalPages = ref(1);
 
+// Search State
+const searchQuery = ref("");
+let debounceTimer: ReturnType<typeof setTimeout>;
+
 const loadItems = async () => {
 	isLoading.value = true;
 	try {
 		const response = await apiService.getItems({ 
 			limit: settings.itemsPerPage,
-			page: currentPage.value 
+			page: currentPage.value,
+			search: searchQuery.value
 		});
 		items.value = response.data;
 		totalPages.value = response.totalPages;
@@ -46,6 +52,14 @@ const changePage = (page: number) => {
 	currentPage.value = page;
 	loadItems();
 };
+
+watch(searchQuery, () => {
+	clearTimeout(debounceTimer);
+	debounceTimer = setTimeout(() => {
+		currentPage.value = 1;
+		loadItems();
+	}, 500);
+});
 
 watch(() => settings.itemsPerPage, () => {
 	currentPage.value = 1;
@@ -129,9 +143,20 @@ const removeItem = async () => {
 		<AppHeader />
 		<div class="view-header">
 			<h2>Sua Lista de Itens</h2>
-			<button class="btn btn-primary" @click="openModal()">
-				+ Novo Item
-			</button>
+			<div class="header-actions">
+				<div class="search-bar">
+					<Search :size="18" class="search-icon" />
+					<input 
+						v-model="searchQuery" 
+						type="text" 
+						placeholder="Pesquisar itens..." 
+						class="search-input"
+					/>
+				</div>
+				<button class="btn btn-primary" @click="openModal()">
+					+ Novo Item
+				</button>
+			</div>
 		</div>
 
 		<main>
@@ -183,9 +208,11 @@ const removeItem = async () => {
 			</template>
 			
 			<div v-else class="empty-state">
-				<p>Nenhum item encontrado. Adicione um novo para começar!</p>
+				<p v-if="searchQuery">Nenhum item encontrado para <strong>{{ searchQuery }}</strong>.</p>
+				<p v-else>Nenhum item encontrado. Adicione um novo para começar!</p>
 			</div>
 		</main>
+
 
 		<ItemModal 
 			:is-open="isModalOpen"
@@ -210,12 +237,76 @@ const removeItem = async () => {
 	justify-content: space-between;
 	align-items: center;
 	margin-bottom: 2rem;
+	gap: 1.5rem;
+}
+
+.header-actions {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+	flex: 1;
+	justify-content: flex-end;
+	flex-wrap: wrap;
+}
+
+.search-bar {
+	position: relative;
+	max-width: 300px;
+	width: 100%;
+}
+
+.search-icon {
+	position: absolute;
+	left: 1rem;
+	top: 50%;
+	transform: translateY(-50%);
+	color: var(--text-muted);
+	pointer-events: none;
+}
+
+.search-input {
+	width: 100%;
+	padding: 0.75rem 1rem 0.75rem 2.8rem;
+	background: var(--input-bg);
+	border: 1px solid var(--glass-border);
+	border-radius: 12px;
+	color: var(--text-main);
+	font-size: 0.95rem;
+	transition: all 0.2s ease;
+}
+
+.search-input:focus {
+	outline: none;
+	border-color: var(--primary);
+	box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+}
+
+.btn-primary {
+	flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+	.view-header {
+		flex-direction: column;
+		align-items: stretch;
+		gap: 1rem;
+	}
+	
+	.header-actions {
+		flex-direction: column;
+		align-items: stretch;
+	}
+	
+	.search-bar {
+		max-width: none;
+	}
 }
 
 .view-header h2 {
 	margin: 0;
 	font-size: 1.5rem;
 	color: var(--text-main);
+	white-space: nowrap;
 }
 
 .items-list {
