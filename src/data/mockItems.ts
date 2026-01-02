@@ -16,8 +16,8 @@ const generateItems = (count: number = 50): Item[] => {
 			id: i,
 			name: `${title} ${subject}`,
 			description: `Descrição detalhada do passo ${i} relacionado a ${subject} na categoria ${category}.`,
-			category: category,
-			createdAt: new Date().toISOString()
+			category: `${category}`,
+			createdAt: new Date().toISOString(),
 		});
 	}
 	return items;
