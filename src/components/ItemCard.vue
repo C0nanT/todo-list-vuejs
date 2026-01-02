@@ -91,6 +91,7 @@ const formatDate = (dateString: string) => {
 	font-size: 1.25rem;
 	font-weight: 600;
 	margin-bottom: 0.25rem;
+	margin-top: 0.5rem;
 }
 
 .item-desc {
