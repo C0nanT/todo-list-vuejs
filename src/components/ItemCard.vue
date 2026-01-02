@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { Pencil, Trash2 } from "lucide-vue-next";
+import { computed } from "vue";
+import { Pencil, Trash2, Calendar } from "lucide-vue-next";
 import type { Item } from "../types";
 
-defineProps<{
+const props = defineProps<{
 	item: Item;
 }>();
 
@@ -10,6 +11,20 @@ defineEmits<{
 	(e: "edit", item: Item): void;
 	(e: "remove", item: Item): void;
 }>();
+
+const isOverdue = computed(() => {
+	if (!props.item.dueDate) return false;
+	const today = new Date();
+	today.setHours(0, 0, 0, 0);
+	const dueDate = new Date(props.item.dueDate);
+	dueDate.setHours(0, 0, 0, 0);
+	return dueDate < today;
+});
+
+const formatDate = (dateString: string) => {
+	const date = new Date(dateString);
+	return date.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' });
+};
 </script>
 
 <template>
@@ -19,6 +34,11 @@ defineEmits<{
 			<p class="item-desc">{{ item.description }}</p>
 			<div v-if="item.tags && item.tags.length > 0" class="item-tags">
 				<span v-for="tag in item.tags" :key="tag" class="tag">{{ tag }}</span>
+			</div>
+			<div v-if="item.dueDate" class="item-due-date" :class="{ 'overdue': isOverdue }">
+				<Calendar :size="14" />
+				<span>{{ formatDate(item.dueDate) }}</span>
+				<span v-if="isOverdue" class="overdue-badge">Vencido</span>
 			</div>
 		</div>
 		<div class="item-actions">
@@ -97,5 +117,28 @@ defineEmits<{
 	border-radius: 10px;
 	font-size: 0.75rem;
 	font-weight: 500;
+}
+
+.item-due-date {
+	display: flex;
+	align-items: center;
+	gap: 0.4rem;
+	margin-top: 0.5rem;
+	font-size: 0.8rem;
+	color: var(--text-muted);
+}
+
+.item-due-date.overdue {
+	color: #ff4d4f;
+}
+
+.overdue-badge {
+	padding: 0.2rem 0.5rem;
+	background: #ff4d4f;
+	color: white;
+	border-radius: 8px;
+	font-size: 0.7rem;
+	font-weight: 600;
+	text-transform: uppercase;
 }
 </style>

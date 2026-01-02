@@ -44,12 +44,14 @@ watch(
 			form.description = newItem.description;
 			form.category = newItem.category;
 			form.tags = newItem.tags || [];
+			form.dueDate = newItem.dueDate || undefined;
 		} else {
 			form.id = Date.now();
 			form.name = "";
 			form.description = "";
 			form.category = "Frontend";
 			form.tags = [];
+			form.dueDate = undefined;
 		}
 	},
 	{ immediate: true }
@@ -153,6 +155,16 @@ const toggleTag = (tag: string) => {
 						{{ tag }}
 					</span>
 				</div>
+			</div>
+
+			<div class="form-group">
+				<label>Data Limite <small>(opcional)</small></label>
+				<input
+					v-model="form.dueDate"
+					type="date"
+					class="form-input"
+					placeholder="Selecione uma data"
+				/>
 			</div>
 
 			<div class="modal-footer">

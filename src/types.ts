@@ -4,6 +4,7 @@ export interface Item {
 	description: string;
 	category: string;
 	tags: string[];
+	dueDate?: string;
 	createdAt: string;
 }
 
@@ -13,6 +14,7 @@ export interface FormState {
 	description: string;
 	category: string;
 	tags: string[];
+	dueDate?: string;
 }
 
 export type SortOrder = 'asc' | 'desc';

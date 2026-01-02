@@ -30,12 +30,22 @@ const generateItems = (count: number = 50): Item[] => {
 			if (tag) tags.push(tag);
 		}
 
+		// Gera data limite aleatória (50% dos itens terão data limite)
+		let dueDate: string | undefined;
+		if (Math.random() > 0.5) {
+			const daysOffset = Math.floor(Math.random() * 30) - 10; // -10 a +20 dias
+			const date = new Date();
+			date.setDate(date.getDate() + daysOffset);
+			dueDate = date.toISOString().split("T")[0]; // YYYY-MM-DD format
+		}
+
 		items.push({
 			id: i,
 			name: `${title} ${subject}`,
 			description: `Descrição detalhada do passo ${i} relacionado a ${subject} na categoria ${category}.`,
 			category: `${category}`,
 			tags,
+			dueDate,
 			createdAt: new Date().toISOString(),
 		});
 	}
