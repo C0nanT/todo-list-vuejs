@@ -57,7 +57,7 @@ const itemsPerPageOptions = [
 							class="form-input"
 							:class="{ 'input-success': showSuccessBorder }"
 							placeholder="Seu nome"
-							style="margin-top: 0.25rem;"
+							style="margin-top: 0.5rem;"
 						>
 					</div>
 				</div>
@@ -76,7 +76,7 @@ const itemsPerPageOptions = [
 							v-model="settings.itemsPerPage" 
 							:options="itemsPerPageOptions"
 							:class="{ 'input-success': showSuccessInterface }"
-							style="margin-top: 0.25rem;"
+							style="margin-top: 0.5rem;"
 							@toggle="isInterfaceDropdownOpen = $event"
 						/>
 					</div>
