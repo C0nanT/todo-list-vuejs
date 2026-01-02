@@ -48,14 +48,16 @@ defineEmits<{
 	justify-content: flex-start;
 	align-items: center;
 	gap: 1.5rem;
-	transition: all 0.3s ease;
+	transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+	box-shadow: var(--shadow-sm);
 	animation: slideUp 0.5s ease backwards;
 }
 
 .item-card:hover {
 	border-color: var(--primary);
-	transform: scale(1.02);
-	background: rgba(30, 41, 59, 0.9);
+	transform: translateY(-4px);
+	background: var(--hover-bg);
+	box-shadow: var(--shadow-md);
 }
 
 .item-info {

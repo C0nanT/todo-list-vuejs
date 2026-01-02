@@ -52,13 +52,13 @@ const handleConfirm = () => {
 }
 
 .modal-content {
-	background: #1e293b;
+	background: var(--input-bg);
 	border: 1px solid var(--glass-border);
 	padding: 2rem 2.5rem;
 	border-radius: 24px;
 	width: 90%;
 	max-width: 400px;
-	box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+	box-shadow: var(--shadow-lg);
 	animation: zoomIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 

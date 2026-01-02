@@ -36,9 +36,9 @@ h1 {
   background: var(--input-bg);
   border: 1px solid var(--glass-border);
   border-radius: 12px;
-  color: white;
+  color: var(--text-main);
   outline: none;
-  transition: border-color 0.3s;
+  transition: all 0.3s ease;
   box-sizing: border-box;
 }
 

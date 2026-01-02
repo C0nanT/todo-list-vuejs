@@ -91,7 +91,7 @@ import { Home, Settings as SettingsIcon, LayoutGrid } from "lucide-vue-next";
 
 .nav-link:hover {
 	color: var(--text-main);
-	background: rgba(255, 255, 255, 0.05);
+	background: var(--hover-bg);
 }
 
 .nav-link.active {

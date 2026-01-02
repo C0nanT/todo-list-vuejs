@@ -166,7 +166,7 @@ const itemsPerPageOptions = [
 .theme-toggle {
 	width: 50px;
 	height: 26px;
-	background: #334155;
+	background: var(--toggle-bg);
 	border-radius: 100px;
 	border: none;
 	cursor: pointer;

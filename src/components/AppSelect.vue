@@ -105,16 +105,12 @@ const selectedLabel = computed(() => {
 }
 
 [data-theme="light"] .select-trigger {
-	border-color: #e2e8f0;
+	border-color: var(--glass-border);
 }
 
 .select-trigger:hover {
 	border-color: var(--primary);
-	background: #2d3748;
-}
-
-[data-theme="light"] .select-trigger:hover {
-	background: #f8fafc;
+	background: var(--hover-bg);
 }
 
 .select-trigger.is-open {
@@ -143,12 +139,11 @@ const selectedLabel = computed(() => {
 	margin: 0;
 	list-style: none;
 	z-index: 100;
-	box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+	box-shadow: var(--shadow-lg);
 }
 
 [data-theme="light"] .select-options {
-	border-color: #e2e8f0;
-	box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+	border-color: var(--glass-border);
 }
 
 .option-item {
@@ -160,16 +155,13 @@ const selectedLabel = computed(() => {
 }
 
 .option-item:hover {
-	background: rgba(255, 255, 255, 0.1);
+	background: var(--hover-bg);
 }
 
 [data-theme="light"] .option-item {
-	color: #0f172a;
+	font-weight: 500;
 }
 
-[data-theme="light"] .option-item:hover {
-	background: rgba(0, 0, 0, 0.05);
-}
 
 .option-item.is-selected {
 	background: var(--primary);
