@@ -20,11 +20,19 @@ const itemToEdit = ref<Item | null>(null);
 const itemToDelete = ref<Item | null>(null);
 const isModalConfirmOpen = ref(false);
 
+// Pagination State
+const currentPage = ref(1);
+const totalPages = ref(1);
+
 const loadItems = async () => {
 	isLoading.value = true;
 	try {
-		const response = await apiService.getItems({ limit: settings.itemsPerPage });
+		const response = await apiService.getItems({ 
+			limit: settings.itemsPerPage,
+			page: currentPage.value 
+		});
 		items.value = response.data;
+		totalPages.value = response.totalPages;
 	} catch (error) {
 		console.error("Erro ao carregar itens:", error);
 		toast.error("Erro ao carregar os itens. Tente novamente.");
@@ -33,7 +41,16 @@ const loadItems = async () => {
 	}
 };
 
-watch(() => settings.itemsPerPage, loadItems);
+const changePage = (page: number) => {
+	if (page < 1 || page > totalPages.value) return;
+	currentPage.value = page;
+	loadItems();
+};
+
+watch(() => settings.itemsPerPage, () => {
+	currentPage.value = 1;
+	loadItems();
+});
 
 onMounted(loadItems);
 
@@ -71,7 +88,8 @@ const saveItem = async (formData: FormState) => {
 			toast.success("Item atualizado com sucesso!");
 		} else {
 			const newItem = await apiService.addItem(formData);
-			items.value.unshift(newItem);
+			currentPage.value = 1;
+			await loadItems();
 			toast.success("Item criado com sucesso!");
 		}
 		closeModal();
@@ -90,7 +108,10 @@ const removeItem = async () => {
 	isLoading.value = true;
 	try {
 		await apiService.deleteItem(id);
-		items.value = items.value.filter((item) => item.id !== id);
+		if (items.value.length === 1 && currentPage.value > 1) {
+			currentPage.value--;
+		}
+		await loadItems();
 		toast.success("Item removido com sucesso!");
 	} catch (error) {
 		console.error("Erro ao remover item:", error);
@@ -118,15 +139,48 @@ const removeItem = async () => {
 				<AppLoading />
 			</div>
 			
-			<div v-else-if="items.length > 0" class="items-list">
-				<ItemCard 
-					v-for="item in items" 
-					:key="item.id" 
-					:item="item"
-					@edit="openModal"
-					@remove="openModalConfirm"
-				/>
-			</div>
+			<template v-else-if="items.length > 0">
+				<div class="items-list">
+					<ItemCard 
+						v-for="item in items" 
+						:key="item.id" 
+						:item="item"
+						@edit="openModal"
+						@remove="openModalConfirm"
+					/>
+				</div>
+
+				<!-- Pagination Controls -->
+				<div class="pagination" v-if="totalPages > 1">
+					<button 
+						class="btn btn-ghost" 
+						:disabled="currentPage === 1"
+						@click="changePage(currentPage - 1)"
+					>
+						Anterior
+					</button>
+					
+					<div class="page-numbers">
+						<button 
+							v-for="p in totalPages" 
+							:key="p"
+							class="page-num"
+							:class="{ active: p === currentPage }"
+							@click="changePage(p)"
+						>
+							{{ p }}
+						</button>
+					</div>
+
+					<button 
+						class="btn btn-ghost" 
+						:disabled="currentPage === totalPages"
+						@click="changePage(currentPage + 1)"
+					>
+						Próximo
+					</button>
+				</div>
+			</template>
 			
 			<div v-else class="empty-state">
 				<p>Nenhum item encontrado. Adicione um novo para começar!</p>
@@ -183,5 +237,56 @@ const removeItem = async () => {
 	display: flex;
 	justify-content: center;
 	align-items: center;
+}
+
+/* Pagination Styles */
+.pagination {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 1.5rem;
+	margin-top: 3rem;
+	padding: 1rem;
+	background: var(--card-bg);
+	border: 1px solid var(--glass-border);
+	border-radius: 16px;
+	backdrop-filter: blur(10px);
+}
+
+.page-numbers {
+	display: flex;
+	gap: 0.5rem;
+}
+
+.page-num {
+	width: 36px;
+	height: 36px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 8px;
+	border: 1px solid var(--glass-border);
+	background: rgba(255, 255, 255, 0.05);
+	color: var(--text-main);
+	cursor: pointer;
+	transition: all 0.2s ease;
+	font-weight: 500;
+}
+
+.page-num:hover {
+	border-color: var(--primary);
+	background: var(--hover-bg);
+}
+
+.page-num.active {
+	background: var(--primary);
+	color: white;
+	border-color: var(--primary);
+	box-shadow: 0 0 15px rgba(139, 92, 246, 0.3);
+}
+
+.btn:disabled {
+	opacity: 0.4;
+	cursor: not-allowed;
 }
 </style>
