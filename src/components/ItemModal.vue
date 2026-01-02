@@ -2,6 +2,7 @@
 import { reactive, watch, computed } from "vue";
 import type { Item, FormState } from "../types";
 import DatePicker from "./DatePicker.vue";
+import { ALL_TAGS } from "../data/constants";
 
 const props = defineProps<{
 	isOpen: boolean;
@@ -91,7 +92,7 @@ const handleSave = () => {
 	}
 };
 
-const availableTags = ["estudo", "configs", "trabalho", "pessoal", "urgente", "projeto"];
+const availableTags = ALL_TAGS;
 
 const toggleTag = (tag: string) => {
 	const index = form.tags.indexOf(tag);
