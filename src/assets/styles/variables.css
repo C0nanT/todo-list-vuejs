@@ -42,9 +42,4 @@
 }
 
 
-body {
-  background-color: var(--bg-dark);
-  color: var(--text-main);
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
 

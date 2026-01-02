@@ -23,9 +23,23 @@ watch(() => settings.itemsPerPage, () => {
 	}, 2000);
 });
 
-const toggleTheme = () => {
-	const newTheme = settings.theme === "dark" ? "light" : "dark";
-	settings.setTheme(newTheme);
+const toggleTheme = (event: MouseEvent) => {
+	const x = event.clientX;
+	const y = event.clientY;
+	
+	const isSupported = (document as any).startViewTransition !== undefined;
+	
+	if (!isSupported) {
+		settings.setTheme(settings.theme === "dark" ? "light" : "dark");
+		return;
+	}
+
+	document.documentElement.style.setProperty("--x", `${x}px`);
+	document.documentElement.style.setProperty("--y", `${y}px`);
+
+	(document as any).startViewTransition(() => {
+		settings.setTheme(settings.theme === "dark" ? "light" : "dark");
+	});
 };
 
 const itemsPerPageOptions = [
