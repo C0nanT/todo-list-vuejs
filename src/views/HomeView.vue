@@ -2,9 +2,10 @@
 import { ref, onMounted, watch } from "vue";
 import { useToast } from "vue-toastification";
 import { useSettingsStore } from "../stores/settings";
-import { Search } from "lucide-vue-next";
+import { Search, ArrowUpDown, ArrowUpAz, ArrowDownZa } from "lucide-vue-next";
 import ItemCard from "../components/ItemCard.vue";
 import ItemModal from "../components/ItemModal.vue";
+import AppSelect from "../components/AppSelect.vue";
 import { apiService } from "../services/api";
 import AppHeader from "../components/AppHeader.vue";
 import AppLoading from "../components/AppLoading.vue";
@@ -29,13 +30,26 @@ const totalPages = ref(1);
 const searchQuery = ref("");
 let debounceTimer: ReturnType<typeof setTimeout>;
 
+// Sorting State
+const sortBy = ref<keyof Item>("name");
+const sortOrder = ref<"asc" | "desc">("asc");
+const isSortDropdownOpen = ref(false);
+
+const sortOptions = [
+	{ label: "Nome", value: "name" },
+	// { label: "Data", value: "createdAt" },
+	// { label: "Tipo", value: "type" },
+];
+
 const loadItems = async () => {
 	isLoading.value = true;
 	try {
 		const response = await apiService.getItems({ 
 			limit: settings.itemsPerPage,
 			page: currentPage.value,
-			search: searchQuery.value
+			search: searchQuery.value,
+			sortBy: sortBy.value,
+			order: sortOrder.value
 		});
 		items.value = response.data;
 		totalPages.value = response.totalPages;
@@ -53,12 +67,21 @@ const changePage = (page: number) => {
 	loadItems();
 };
 
+const toggleSortOrder = () => {
+	sortOrder.value = sortOrder.value === "asc" ? "desc" : "asc";
+};
+
 watch(searchQuery, () => {
 	clearTimeout(debounceTimer);
 	debounceTimer = setTimeout(() => {
 		currentPage.value = 1;
 		loadItems();
 	}, 500);
+});
+
+watch([sortBy, sortOrder], () => {
+	currentPage.value = 1;
+	loadItems();
 });
 
 watch(() => settings.itemsPerPage, () => {
@@ -153,6 +176,23 @@ const removeItem = async () => {
 						class="search-input"
 					/>
 				</div>
+
+				<div class="sort-controls" :class="{ 'has-open-dropdown': isSortDropdownOpen }">
+					<AppSelect 
+						v-model="sortBy" 
+						:options="sortOptions"
+						placeholder="Ordenar por"
+						@toggle="isSortDropdownOpen = $event"
+					/>
+					<button 
+						class="btn btn-icon" 
+						@click="toggleSortOrder"
+						:title="sortOrder === 'asc' ? 'Ordem Crescente' : 'Ordem Decrescente'"
+					>
+						<component :is="sortOrder === 'asc' ? ArrowUpAz : ArrowDownZa" :size="20" />
+					</button>
+				</div>
+
 				<button class="btn btn-primary" @click="openModal()">
 					+ Novo Item
 				</button>
@@ -247,6 +287,33 @@ const removeItem = async () => {
 	flex: 1;
 	justify-content: flex-end;
 	flex-wrap: wrap;
+}
+
+.sort-controls {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	min-width: 200px;
+}
+
+.btn-icon {
+	width: 44px;
+	height: 44px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: var(--input-bg);
+	border: 1px solid var(--glass-border);
+	border-radius: 12px;
+	color: var(--text-main);
+	cursor: pointer;
+	transition: all 0.2s ease;
+}
+
+.btn-icon:hover {
+	border-color: var(--primary);
+	background: var(--hover-bg);
+	transform: translateY(-2px);
 }
 
 .search-bar {
