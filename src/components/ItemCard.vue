@@ -61,7 +61,7 @@ const handleItemClick = (event: Event) => {
 				<span v-if="item.category" class="item-category tag-label">{{ item.category }}</span>
 				<span v-if="item.priority" class="tag-label" :class="getPriorityClass(item.priority)">{{ getPriorityLabel(item.priority) }}</span>
 			</div>
-			<div v-if="item.dueDate" class="item-due-date tag-label" :class="{ 'overdue': isOverdue }">
+			<div v-if="item.dueDate" class="item-due-date" :class="{ 'overdue': isOverdue }">
 				<Calendar :size="14" />
 				<span>{{ formatDate(item.dueDate) }}</span>
 				<span v-if="isOverdue" class="overdue-badge">Atrasado</span>
@@ -145,13 +145,21 @@ const handleItemClick = (event: Event) => {
 	display: flex;
 	align-items: center;
 	gap: 0.4rem;
-	margin-top: 0.5rem;
+	margin-top: 1rem;
 	font-size: 0.8rem;
 	color: var(--text-muted);
+	padding: 0.3rem 0.7rem;
+	/* background: var(--input-bg); */
+	border: 1px solid var(--glass-border);
+	border-radius: 10px;
+	font-weight: 500;
+	width: fit-content;
 }
 
 .item-due-date.overdue {
 	color: #ff4d4f;
+	border-color: #e4515179;
+	background: rgba(231, 78, 78, 0.172);
 }
 
 .overdue-badge {
