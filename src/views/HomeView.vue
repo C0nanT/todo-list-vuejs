@@ -38,6 +38,8 @@ const isSortDropdownOpen = ref(false);
 const sortOptions = [
 	{ label: "Nome", value: "name" },
 	{ label: "Vencimento", value: "dueDate" },
+	{ label: "Prioridade", value: "priority" },
+	{ label: "Categoria", value: "category" },
 ];
 
 const loadItems = async () => {
