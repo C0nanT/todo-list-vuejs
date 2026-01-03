@@ -30,6 +30,7 @@ export interface GetItemsParams {
 	page?: number;
 	limit?: number;
 	tags?: string[];
+	includeDone?: boolean;
 }
 
 export interface GetItemsResponse {

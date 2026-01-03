@@ -43,7 +43,6 @@ const itemsPerPageOptions = [
 
 <template>
 	<div class="view-container">
-
 		<div class="view-header">
 			<SettingsIcon :size="20" />
 			<span class="view-title"><strong>Configurações</strong></span>

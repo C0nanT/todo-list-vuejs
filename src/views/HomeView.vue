@@ -30,6 +30,9 @@ const totalPages = ref(1);
 const searchQuery = ref("");
 let debounceTimer: ReturnType<typeof setTimeout>;
 
+// Filter State
+const showDoneItems = ref(false);
+
 // Sorting State
 const sortBy = ref<keyof Item>("name");
 const sortOrder = ref<"asc" | "desc">("asc");
@@ -50,7 +53,8 @@ const loadItems = async () => {
 			page: currentPage.value,
 			search: searchQuery.value,
 			sortBy: sortBy.value,
-			order: sortOrder.value
+			order: sortOrder.value,
+			includeDone: showDoneItems.value
 		});
 		items.value = response.data;
 		totalPages.value = response.totalPages;
@@ -86,6 +90,11 @@ watch([sortBy, sortOrder], () => {
 });
 
 watch(() => settings.itemsPerPage, () => {
+	currentPage.value = 1;
+	loadItems();
+});
+
+watch(showDoneItems, () => {
 	currentPage.value = 1;
 	loadItems();
 });
@@ -209,6 +218,17 @@ const removeItem = async () => {
 					>
 						<component :is="sortOrder === 'asc' ? ArrowUp : ArrowDown" :size="20" />
 					</button>
+				</div>
+
+				<div class="filter-controls">
+					<label class="checkbox-label">
+						<input 
+							type="checkbox" 
+							v-model="showDoneItems"
+							class="checkbox-input"
+						/>
+						<span class="checkbox-text">Mostrar concluídos</span>
+					</label>
 				</div>
 
 				<button class="btn btn-primary" @click="openModal()">
@@ -465,5 +485,41 @@ const removeItem = async () => {
 .btn:disabled {
 	opacity: 0.4;
 	cursor: not-allowed;
+}
+
+/* Filter Controls */
+.filter-controls {
+	display: flex;
+	align-items: center;
+}
+
+.checkbox-label {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	cursor: pointer;
+	font-size: 0.9rem;
+	color: var(--text-muted);
+	padding: 0.5rem 1rem;
+	background: var(--input-bg);
+	border: 1px solid var(--glass-border);
+	border-radius: 12px;
+	transition: all 0.2s ease;
+}
+
+.checkbox-label:hover {
+	border-color: var(--primary);
+	background: var(--hover-bg);
+}
+
+.checkbox-input {
+	width: 16px;
+	height: 16px;
+	cursor: pointer;
+	accent-color: var(--primary);
+}
+
+.checkbox-text {
+	user-select: none;
 }
 </style>

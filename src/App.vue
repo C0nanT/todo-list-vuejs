@@ -34,7 +34,7 @@ import AppSidebar from "./components/AppSidebar.vue";
 }
 
 .page-content {
-	max-width: 1000px;
+	max-width: 1400px;
 	margin: 0 auto;
 	position: relative;
 	min-height: 400px;

@@ -44,10 +44,15 @@ app.get('/api/items', async (req, res) => {
 		page = "1",
 		limit = "10",
 		tags,
+		includeDone = "false",
 	} = req.query;
     
     let query: any = {};
     const conditions: any[] = [];
+    
+    if (includeDone !== "true") {
+      conditions.push({ done: { $ne: true } });
+    }
     
     if (search) {
 		conditions.push({

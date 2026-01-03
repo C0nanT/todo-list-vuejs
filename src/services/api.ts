@@ -17,6 +17,9 @@ export const apiService = {
 		if (params.tags && params.tags.length > 0) {
 			params.tags.forEach(tag => url.searchParams.append('tags', tag));
 		}
+		if (params.includeDone !== undefined) {
+			url.searchParams.append("includeDone", params.includeDone.toString());
+		}
 
 		const response = await fetch(url.toString());
 		if (!response.ok) throw new Error("Erro ao buscar itens");
