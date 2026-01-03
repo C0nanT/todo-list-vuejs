@@ -153,6 +153,22 @@ app.put('/api/items/:id', async (req, res) => {
   }
 });
 
+// DELETE /api/items/:id
+app.delete('/api/items/:id', async (req, res) => {
+  try {
+    const id = parseInt(req.params.id);
+    const result = await collection.deleteOne({ id });
+    
+    if (result.deletedCount === 0) {
+      return res.status(404).json({ error: 'Item not found' });
+    }
+    
+    res.json({ success: true });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to delete item' });
+  }
+});
+
 // GET /api/settings
 app.get('/api/settings', async (req, res) => {
   try {

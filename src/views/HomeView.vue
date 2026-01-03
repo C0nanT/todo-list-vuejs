@@ -172,9 +172,19 @@ const removeItem = async () => {
 	isLoading.value = true;
 	try {
 		await apiService.deleteItem(id);
-		if (items.value.length === 1 && currentPage.value > 1) {
+		
+		// Remove o item da lista local imediatamente
+		const index = items.value.findIndex(item => item.id === id);
+		if (index !== -1) {
+			items.value.splice(index, 1);
+		}
+		
+		// Se a página ficou vazia e não é a primeira página, volta uma página
+		if (items.value.length === 0 && currentPage.value > 1) {
 			currentPage.value--;
 		}
+		
+		// Recarrega para garantir consistência com o servidor
 		await loadItems();
 		toast.success("Item removido com sucesso!");
 	} catch (error) {
