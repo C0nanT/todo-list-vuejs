@@ -1,5 +1,5 @@
 import type { Item } from "../types";
-import { ALL_TAGS } from "./constants";
+import { ALL_PRIORITIES, ALL_TAGS } from "./constants";
 
 // Função para gerar itens aleatórios
 const generateItems = (count: number = 50): Item[] => {
@@ -31,7 +31,9 @@ const generateItems = (count: number = 50): Item[] => {
 		"Testing",
 		"Backend",
 	];
+
 	const allTags = [...ALL_TAGS];
+	const priorities = [...ALL_PRIORITIES];
 
 	const items: Item[] = [];
 	for (let i = 1; i <= count; i++) {
@@ -58,11 +60,16 @@ const generateItems = (count: number = 50): Item[] => {
 			dueDate = date.toISOString().split("T")[0]; // YYYY-MM-DD format
 		}
 
+		// Gera prioridade aleatória
+		const priority =
+			priorities[Math.floor(Math.random() * priorities.length)];
+
 		items.push({
 			id: i,
 			name: `${title} ${subject}`,
 			description: `Descrição detalhada do passo ${i} relacionado a ${subject} na categoria ${category}.`,
 			category: `${category}`,
+			priority: `${priority}`,
 			tags,
 			dueDate,
 			createdAt: new Date().toISOString(),

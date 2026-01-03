@@ -3,6 +3,7 @@ export interface Item {
 	name: string;
 	description: string;
 	category: string;
+	priority: string;
 	tags: string[];
 	dueDate?: string;
 	createdAt: string;
@@ -13,6 +14,7 @@ export interface FormState {
 	name: string;
 	description: string;
 	category: string;
+	priority: string;
 	tags: string[];
 	dueDate?: string;
 }

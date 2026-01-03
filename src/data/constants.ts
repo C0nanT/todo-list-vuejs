@@ -1,10 +1,13 @@
 export const ALL_TAGS = [
-	"estudo",
-	"configs",
-	"trabalho",
-	"pessoal",
-	"urgente",
-	"projeto",
+	"Estudo",
+	"Configs",
+	"Trabalho",
+	"Pessoal",
+	"Urgente",
+	"Projeto",
 ] as const;
 
-export type Tag = typeof ALL_TAGS[number];
+export const ALL_PRIORITIES = ["Baixa", "Média", "Alta"] as const;
+
+export type Tag = (typeof ALL_TAGS)[number];
+export type Priority = (typeof ALL_PRIORITIES)[number];

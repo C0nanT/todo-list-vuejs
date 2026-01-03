@@ -33,9 +33,11 @@ const formatDate = (dateString: string) => {
 			<h3 class="item-name">{{ item.name }}</h3>
 			<p class="item-desc">{{ item.description }}</p>
 			<div v-if="item.tags && item.tags.length > 0" class="item-tags">
-				<span v-for="tag in item.tags" :key="tag" class="tag">{{ tag }}</span>
+				<span v-for="tag in item.tags" :key="tag" class="item-tag tag-label">{{ tag }}</span>
+				<span v-if="item.category" class="item-category tag-label">{{ item.category }}</span>
 			</div>
-			<div v-if="item.dueDate" class="item-due-date" :class="{ 'overdue': isOverdue }">
+			<span v-if="item.priority" class="tag-label">{{ item.priority }}</span>
+			<div v-if="item.dueDate" class="item-due-date tag-label" :class="{ 'overdue': isOverdue }">
 				<Calendar :size="14" />
 				<span>{{ formatDate(item.dueDate) }}</span>
 				<span v-if="isOverdue" class="overdue-badge">Atrasado</span>
@@ -111,13 +113,8 @@ const formatDate = (dateString: string) => {
 	margin-top: 0.5rem;
 }
 
-.tag {
-	padding: 0.25rem 0.6rem;
+.item-tag {
 	background: var(--primary);
-	color: white;
-	border-radius: 10px;
-	font-size: 0.75rem;
-	font-weight: 500;
 }
 
 .item-due-date {
@@ -142,4 +139,18 @@ const formatDate = (dateString: string) => {
 	font-weight: 600;
 	text-transform: uppercase;
 }
+
+.item-category {
+	background: var(--secondary);
+}
+
+.tag-label {
+	padding: 0.25rem 0.6rem;
+	color: white;
+	border-radius: 10px;
+	font-size: 0.75rem;
+	font-weight: 500;
+	width: fit-content;
+}
+
 </style>
